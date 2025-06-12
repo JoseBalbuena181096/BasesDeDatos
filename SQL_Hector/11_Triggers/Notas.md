@@ -171,3 +171,4 @@ DELIMITER ;
 DELETE FROM product
 WHERE id = 6;
 ```
+
