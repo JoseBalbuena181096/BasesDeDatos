@@ -671,4 +671,18 @@ ORDER BY COUNT(*) DESC LIMIT 1;
 
 ¿Cuál es la serie con raiting de imdb promedio más alto?
 
+```SQL
+SELECT serie_id , AVG(rating_imdb) AS rating_promedio
+FROM  Episodios
+GROUP BY serie_id
+ORDER BY rating_promedio DESC LIMIT 1;
+```
+
 ¿Cual es el episodio mas largo?
+
+```SQL
+SELECT episodio_id , MAX(duracion) AS duracion_maxima
+FROM  Episodios
+GROUP BY episodio_id
+ORDER BY duracion_maxima DESC LIMIT 1;
+```
