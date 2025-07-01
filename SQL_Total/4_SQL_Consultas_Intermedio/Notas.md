@@ -450,3 +450,380 @@ SELECT
 FROM series;
 
 ```
+
+## Funciones de fecha y hora
+
+- YEAR() devuelve la parte del año para una fecha especifica.
+- MONTH() y DAY() funcionan de forma mas parecida pero con mes y dia respectivamente.
+- DATEADD() Agrega un intervalo de hora/fecha a una fecha y devuelve la fecha.
+
+Seleccionarel año de la fecha de estreno de los episodios
+
+```SQL
+SELECT fecha_estreno, YEAR(fecha_estreno) AS 'Año de estreno' FROM episodios;
+```
+
+Lo mismo se puede hacer con el mes
+
+```SQL
+SELECT fecha_estreno, MONTH(fecha_estreno) AS 'Mes de estreno' FROM episodios;
+```
+
+Tambien se pueden añadir dias a la fecha
+
+```SQL
+SELECT fecha_estreno, DATE_ADD(fecha_estreno, INTERVAL 20 DAY) AS 'Fecha de estreno + 20 dias' FROM episodios;
+```
+
+Saber cuantos dias pasaron desde el estreno de los episodios hasta la fecha actual
+
+```SQL
+SELECT fecha_estreno, DATEDIFF(CURDATE(), fecha_estreno) AS 'Dias desde estreno' FROM episodios;
+```
+
+## Manipulación de cadenas de texto
+
+Son metodos que nos permiten manipular cadenas de texto.
+
+```SQL
+SELECT UPPER(titulo) AS 'Titulo en mayusculas' FROM series;
+SELECT LOWER(titulo) AS 'Titulo en minusculas' FROM series;
+SELECT titulo, LENGTH(titulo) AS 'Longitud del titulo' FROM series;
+SELECT titulo, SUBSTRING(titulo, 1, 5) AS 'Titulo cortado' FROM series;
+SELECT CONCAT(titulo, '(', año_lanzamiento, ')') AS 'Titulo y año de lanzamiento' FROM series;
+
+SELECT
+    titulo,
+    LEFT(titulo, 3) AS 'Inicio del titulo',
+    RIGHT(titulo, 3) AS 'Fin del titulo'
+FROM series;
+
+```
+
+## Práctica UPPER
+
+Enunciado:
+
+Escribe una consulta SQL que utilice la función UPPER para convertir el título de todas las series en la tabla Series a mayúsculas.
+
+Asigna un alias titulo_mayusculas al resultado.
+
+Resultado esperado:
+
++-------------------+
+| titulo_mayusculas |
++-------------------+
+| BREAKING BAD |
+| STRANGER THINGS |
+| THE CROWN |
+| ... |
++-------------------+
+
+Base de datos NetflixDB
+
+Tabla: Actores
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| actor_id | int |
+| nombre | text |
+| fecha_nacimiento | date |
++-------------------+----------+
+actor_id es la clave primaria (columna con valores únicos) para esta tabla.
+Cada fila de esta tabla indica el ID, nombre y fecha de nacimiento de un actor.
+
+Tabla: Series
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| serie_id | int |
+| titulo | text |
+| descripcion | text |
+| año_lanzamiento | int |
+| genero | text |
++-------------------+----------+
+serie_id es la clave primaria (columna con valores únicos) para esta tabla.
+Cada fila de esta tabla indica el ID, título, descripción, año de lanzamiento y género de una serie.
+
+Tabla: Episodios
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| episodio_id | int |
+| serie_id | int |
+| titulo | text |
+| duracion | int |
+| rating_imdb | int |
+| temporada | int |
+| descripcion | text |
+| fecha_estreno | date |
++-------------------+----------+
+episodio_id es la clave primaria (columna con valores únicos) para esta tabla.
+serie_id es una clave foránea (columnas de referencia) de la serie_id de la tabla Series.
+Cada fila de esta tabla indica el ID de un episodio, el ID de la serie a la que pertenece, título, duración, rating en IMDb, temporada, descripción y fecha de estreno.
+
+Tabla: Actuaciones
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| actor_id | int |
+| serie_id | int |
+| personaje | text |
++-------------------+----------+
+actor_id y serie_id son claves primarias compuestas para esta tabla, y cada una es también una clave foránea que referencia las tablas Actores y Series, respectivamente.
+Cada fila de esta tabla indica el ID del actor, el ID de la serie y el personaje interpretado por el actor en la serie.
+
+```SQL
+SELECT UPPER(titulo) AS titulo_mayusculas
+FROM series;
+```
+
+## Práctica SUBSTR
+
+Enunciado:
+
+Escribe una consulta SQL que utilice la función SUBSTR para extraer los primeros 5 caracteres del título de cada episodio en la tabla Episodios.
+
+Asigna un alias primeros_cinco_caracteres al resultado.
+
+Resultado esperado:
+
++---------------------------+
+| primeros_cinco_caracteres |
++---------------------------+
+| Pilot |
+| Gato |
+| Manda |
+| Phoen |
+| ABQ |
+| ... |
++---------------------------+
+
+Base de datos NetflixDB
+
+Tabla: Actores
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| actor_id | int |
+| nombre | text |
+| fecha_nacimiento | date |
++-------------------+----------+
+actor_id es la clave primaria (columna con valores únicos) para esta tabla.
+Cada fila de esta tabla indica el ID, nombre y fecha de nacimiento de un actor.
+
+Tabla: Series
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| serie_id | int |
+| titulo | text |
+| descripcion | text |
+| año_lanzamiento | int |
+| genero | text |
++-------------------+----------+
+serie_id es la clave primaria (columna con valores únicos) para esta tabla.
+Cada fila de esta tabla indica el ID, título, descripción, año de lanzamiento y género de una serie.
+
+Tabla: Episodios
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| episodio_id | int |
+| serie_id | int |
+| titulo | text |
+| duracion | int |
+| rating_imdb | int |
+| temporada | int |
+| descripcion | text |
+| fecha_estreno | date |
++-------------------+----------+
+episodio_id es la clave primaria (columna con valores únicos) para esta tabla.
+serie_id es una clave foránea (columnas de referencia) de la serie_id de la tabla Series.
+Cada fila de esta tabla indica el ID de un episodio, el ID de la serie a la que pertenece, título, duración, rating en IMDb, temporada, descripción y fecha de estreno.
+
+Tabla: Actuaciones
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| actor_id | int |
+| serie_id | int |
+| personaje | text |
++-------------------+----------+
+actor_id y serie_id son claves primarias compuestas para esta tabla, y cada una es también una clave foránea que referencia las tablas Actores y Series, respectivamente.
+Cada fila de esta tabla indica el ID del actor, el ID de la serie y el personaje interpretado por el actor en la serie.
+
+```sql
+SELECT  SUBSTRING(titulo, 1, 5) AS 'primeros_cinco_caracteres'
+FROM Episodios;
+```
+
+## Funciones matematicas
+
+- FLOOR() redondea un numero hacia abajo.
+- CEIL() redondea un numero hacia arriba.
+- ROUND() redondea un numero hacia el numero mas cercano.
+
+```SQL
+SELECT titulo, duracion/60.0 AS Horas_completas, ROUND(duracion/60.0) AS Horas_redondeadas FROM Episodios;
+
+SELECT titulo,duracion, CEIL(duracion/60.0) AS Horas_Completas FROM Episodios;
+
+SELECT titulo,duracion, FLOOR(duracion/60.0) AS Horas_Completas FROM Episodios;
+```
+
+## Práctica CEILING
+
+Enunciado:
+
+Escribe una consulta SQL que utilice la función CEILING para redondear hacia arriba los números de la columna rating_imdb en la tabla Episodios
+
+Asigna un alias rating_redondeado al resultado
+
+Resultado esperado:
+
++---------------------------+
+| rating_redondeado |
++---------------------------+
+| 9 |
+| 9 |
+| 9 |
+| 10 |
+| 10 |
+| ... |
++---------------------------+
+
+Base de datos NetflixDB
+
+Tabla: Actores
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| actor_id | int |
+| nombre | text |
+| fecha_nacimiento | date |
++-------------------+----------+
+actor_id es la clave primaria (columna con valores únicos) para esta tabla.
+Cada fila de esta tabla indica el ID, nombre y fecha de nacimiento de un actor.
+
+Tabla: Series
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| serie_id | int |
+| titulo | text |
+| descripcion | text |
+| año_lanzamiento | int |
+| genero | text |
++-------------------+----------+
+serie_id es la clave primaria (columna con valores únicos) para esta tabla.
+Cada fila de esta tabla indica el ID, título, descripción, año de lanzamiento y género de una serie.
+
+Tabla: Episodios
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| episodio_id | int |
+| serie_id | int |
+| titulo | text |
+| duracion | int |
+| rating_imdb | int |
+| temporada | int |
+| descripcion | text |
+| fecha_estreno | date |
++-------------------+----------+
+episodio_id es la clave primaria (columna con valores únicos) para esta tabla.
+serie_id es una clave foránea (columnas de referencia) de la serie_id de la tabla Series.
+Cada fila de esta tabla indica el ID de un episodio, el ID de la serie a la que pertenece, título, duración, rating en IMDb, temporada, descripción y fecha de estreno.
+
+Tabla: Actuaciones
+
++-------------------+----------+
+| Nombre de Columna | Tipo |
++-------------------+----------+
+| actor_id | int |
+| serie_id | int |
+| personaje | text |
++-------------------+----------+
+actor_id y serie_id son claves primarias compuestas para esta tabla, y cada una es también una clave foránea que referencia las tablas Actores y Series, respectivamente.
+Cada fila de esta tabla indica el ID del actor, el ID de la serie y el personaje interpretado por el actor en la serie.
+
+```SQL
+SELECT CEILING(rating_imdb) AS 'rating_redondeado'
+FROM Episodios;
+```
+
+## Quiz
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+![alt text](image-4.png)
+
+![alt text](image-5.png)
+
+![alt text](image-6.png)
+
+![alt text](image-7.png)
+
+## Proyecto del dia
+
+- Correr una subconsulta de sql
+- Utiliza una subconsulta para identificar los tres generos mas populares
+  (en funcion de la cantidade de series que pertenecen a cada genero)
+
+- Para cada genero identificado identifica el titulo de la serie,
+  año de lanzamiento y rating imdb promedio
+
+```SQL
+SELECT genero
+FROM series
+GROUP BY genero
+ORDER BY COUNT(*) DESC
+LIMIT 3;
+```
+
+Tips
+
+- Utiliza una subconsulta que seleccione los generos y cuente la cantidad de series en cada genero.
+  Ordena los resultados por cantidad de serie de manera descendente y liminta los resultados a 3.
+
+En la consulta principal filtra las series que correspondan a dichos tres generos utilizando la clausula IN
+Pudes unir la tabla series con la tabla Episodios para obtener el rating imdb promedio de cada serie.
+
+```SQL
+SELECT
+	s.genero,
+    s.titulo,
+    s.año_lanzamiento,
+    AVG(e.rating_imdb) AS rating_promedio
+FROM Series s
+JOIN Episodios e ON s.serie_id = e.serie_id
+WHERE s.genero IN (
+    SELECT genero FROM (
+        SELECT genero, COUNT(*) AS cantidad_de_series
+        FROM Series
+        GROUP BY genero
+        ORDER BY cantidad_de_series DESC
+        LIMIT 3
+    ) AS top_generos
+)
+GROUP BY s.serie_id
+ORDER BY rating_promedio DESC;
+```
